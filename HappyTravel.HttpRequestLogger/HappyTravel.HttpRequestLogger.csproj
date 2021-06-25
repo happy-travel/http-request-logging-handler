@@ -7,12 +7,12 @@
         <Company>HappyTravel</Company>
         <Authors>Vadim Mingazhev</Authors>
         <Description>Configurable http-request logging handler</Description>
-        <PackageReleaseNotes>Init</PackageReleaseNotes>
+        <PackageReleaseNotes>Added chaining ability</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/happy-travel/http-request-logging-handler</PackageProjectUrl>
         <RepositoryURL>https://github.com/happy-travel/http-request-logging-handler</RepositoryURL>
-        <Version>0.8.0</Version>
+        <Version>0.9.0</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>0.8.0</PackageVersion>
+        <PackageVersion>0.9.0</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>

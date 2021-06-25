@@ -7,7 +7,7 @@ namespace HappyTravel.HttpRequestLogger
 {
     public static class HttpLoggingServiceCollectionExtensions
     {
-        public static void AddHttpClientRequestLogging(this IHttpClientBuilder builder, IConfiguration configuration, 
+        public static IHttpClientBuilder AddHttpClientRequestLogging(this IHttpClientBuilder builder, IConfiguration configuration, 
             Action<SensitiveDataProcessingOptions>? sensitiveDataLoggingOptions = null)
         {
             builder.Services.Configure<RequestLoggingOptions>(configuration.GetSection("RequestLoggingOptions"));
@@ -18,6 +18,8 @@ namespace HappyTravel.HttpRequestLogger
                 builder.Services.Configure(sensitiveDataLoggingOptions);
             else
                 builder.Services.Configure<SensitiveDataProcessingOptions>(o => o.SanitizingFunction = null);
+
+            return builder;
         }
     }
 }
