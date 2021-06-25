@@ -1,13 +1,13 @@
 ---
 kind: pipeline
 name: Nuget packages
-        
+
 trigger:
   branch:
     - main
   event:
     - push
-    
+
 steps:
 - name: Build packages
   image: mcr.microsoft.com/dotnet/sdk:5.0-focal
@@ -44,7 +44,7 @@ trigger:
       - pull_request
 
 steps:
-- name: Test packages 
+- name: Test packages
   image: mcr.microsoft.com/dotnet/sdk:5.0-focal
   environment:
     GITHUB_TOKEN:
