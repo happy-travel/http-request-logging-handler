@@ -7,12 +7,12 @@
         <Company>HappyTravel</Company>
         <Authors>Vadim Mingazhev</Authors>
         <Description>Configurable http-request logging handler</Description>
-        <PackageReleaseNotes>Added chaining ability</PackageReleaseNotes>
+        <PackageReleaseNotes>Changed log entry from record to class to reduce memory traffic during sanitizing</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/happy-travel/http-request-logging-handler</PackageProjectUrl>
         <RepositoryURL>https://github.com/happy-travel/http-request-logging-handler</RepositoryURL>
-        <Version>0.9.0</Version>
+        <Version>0.9.1</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>0.9.0</PackageVersion>
+        <PackageVersion>0.9.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>

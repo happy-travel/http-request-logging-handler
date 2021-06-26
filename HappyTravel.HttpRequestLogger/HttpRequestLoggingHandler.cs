@@ -62,14 +62,11 @@ namespace HappyTravel.HttpRequestLogger
             {
                 var response = await base.SendAsync(request, cancellationToken);
 
-                logEntry = logEntry with
-                {
-                    ResponseHeaders = options.AreResponseHeadersHidden
-                        ? new()
-                        : GetDictionary(response.Headers),
-                    ResponseBody = await response.Content.ReadAsStringAsync(cancellationToken),
-                    StatusCode = (int) response.StatusCode
-                };
+                logEntry.ResponseHeaders = options.AreResponseHeadersHidden
+                    ? new()
+                    : GetDictionary(response.Headers);
+                logEntry.ResponseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                logEntry.StatusCode = (int) response.StatusCode;
                 
                 var sanitizedEntry = _sensitiveDataProcessingOptions.Value.SanitizingFunction?.Invoke(logEntry) ?? logEntry;
 
