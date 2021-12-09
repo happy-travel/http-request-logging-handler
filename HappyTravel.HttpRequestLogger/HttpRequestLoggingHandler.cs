@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HappyTravel.HttpRequestLogger.Infrastructure;
 using HappyTravel.HttpRequestLogger.Models;
 using HappyTravel.HttpRequestLogger.Options;
 using Microsoft.Extensions.Logging;
@@ -32,7 +34,7 @@ namespace HappyTravel.HttpRequestLogger
 
             if (options.UrlPattern is not null)
             {
-                var regex = new Regex(options.UrlPattern);
+                var regex = new Regex(options.UrlPattern, RegexOptions.Compiled);
                 if (!regex.IsMatch(request.RequestUri?.ToString() ?? string.Empty))
                     return base.SendAsync(request, cancellationToken);
             }
@@ -85,16 +87,19 @@ namespace HappyTravel.HttpRequestLogger
 
             void WriteLog(HttpRequestLogEntry entry, Exception? exception = null)
             {
-                _logger.LogInformation(new EventId(120000, "HttpRequestLogging"),
-                    exception, 
-                    "{Method}: {Url}\n{RequestHeaders}\n{RequestBody}\n{ResponseHeaders}\n{ResponseBody}\n{StatusCode}",
-                    entry.Method,
-                    entry.Url,
-                    entry.RequestHeaders,
-                    entry.RequestBody,
-                    entry.ResponseHeaders,
-                    entry.ResponseBody,
-                    entry.StatusCode);
+                var data = new Dictionary<string, object>
+                {
+                    ["Method"] = entry.Method,
+                    ["Url"] = entry.Url,
+                    ["RequestHeaders"] = ConvertToString(entry.RequestHeaders),
+                    ["RequestBody"] = entry.RequestBody ?? string.Empty,
+                    ["ResponseHeaders"] = ConvertToString(entry.ResponseHeaders),
+                    ["ResponseBody"] = entry.ResponseBody ?? string.Empty,
+                    ["StatusCode"] = entry.StatusCode.ToString()
+                };
+
+                using var scope = _logger.BeginScope(data);
+                _logger.LogHttpRequestLogging(exception);
             }
         }
         
@@ -103,6 +108,24 @@ namespace HappyTravel.HttpRequestLogger
         {
             return headers.ToDictionary(h => h.Key, 
                 h => string.Join(";", h.Value));
+        }
+
+        private static string ConvertToString(Dictionary<string, string>? dictionary)
+        {
+            if (dictionary is null)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+
+            foreach (var (key, value) in dictionary)
+            {
+                sb.Append(key);
+                sb.Append(':');
+                sb.Append(value);
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
         }
 
 

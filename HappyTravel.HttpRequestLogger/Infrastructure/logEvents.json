@@ -1,0 +1,8 @@
+[
+  {
+    "id": 120000,
+    "name": "HttpRequestLogging",
+    "level": "Information",
+    "template": "Http request logging"
+  }
+]
