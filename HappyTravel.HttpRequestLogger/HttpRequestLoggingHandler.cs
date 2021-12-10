@@ -117,13 +117,8 @@ namespace HappyTravel.HttpRequestLogger
 
             var sb = new StringBuilder();
 
-            foreach (var (key, value) in dictionary)
-            {
-                sb.Append(key);
-                sb.Append(':');
-                sb.Append(value);
-                sb.AppendLine();
-            }
+            foreach (var (key, value) in dictionary) 
+                sb.AppendFormat("{0}: {1}{2}", key, value, Environment.NewLine);
 
             return sb.ToString();
         }
