@@ -87,13 +87,14 @@ namespace HappyTravel.HttpRequestLogger
 
             void WriteLog(HttpRequestLogEntry entry, Exception? exception = null)
             {
+                var sb = new StringBuilder();
                 var data = new Dictionary<string, object>
                 {
                     ["Method"] = entry.Method,
                     ["Url"] = entry.Url,
-                    ["RequestHeaders"] = ConvertToString(entry.RequestHeaders),
+                    ["RequestHeaders"] = ConvertToString(entry.RequestHeaders, sb),
                     ["RequestBody"] = entry.RequestBody ?? string.Empty,
-                    ["ResponseHeaders"] = ConvertToString(entry.ResponseHeaders),
+                    ["ResponseHeaders"] = ConvertToString(entry.ResponseHeaders, sb),
                     ["ResponseBody"] = entry.ResponseBody ?? string.Empty,
                     ["StatusCode"] = entry.StatusCode.ToString()
                 };
@@ -110,12 +111,12 @@ namespace HappyTravel.HttpRequestLogger
                 h => string.Join(";", h.Value));
         }
 
-        private static string ConvertToString(Dictionary<string, string>? dictionary)
+        private static string ConvertToString(Dictionary<string, string>? dictionary, StringBuilder sb)
         {
             if (dictionary is null)
                 return string.Empty;
 
-            var sb = new StringBuilder();
+            sb.Clear();
 
             foreach (var (key, value) in dictionary) 
                 sb.AppendFormat("{0}: {1}{2}", key, value, Environment.NewLine);
