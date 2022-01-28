@@ -44,6 +44,8 @@ Method parameters:
     "UrlPattern": "*/test$", // url pattern in RegEx format to allow logging [Optional]
     "AreRequestHeadersHidden": true, // true if request headers should not be logged [Optional]
     "AreResponseHeadersHidden": true // true if response heades should not be logged [Optional]
+    "MaxRequestBodySize": 101024 // 10kB - limit of logged request body in bytes [Optional]
+    "MaxResponseBodySize": 101024 // 10kB - limit of logged response body in bytes [Optional]
   }
 }
 ...
