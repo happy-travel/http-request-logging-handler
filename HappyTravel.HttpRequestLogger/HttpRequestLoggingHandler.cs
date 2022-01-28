@@ -48,7 +48,7 @@ namespace HappyTravel.HttpRequestLogger
             CancellationToken cancellationToken)
         {
             var requestBody = request.Content is not null
-                ? await ReadBytes(await request.Content.ReadAsStreamAsync(cancellationToken), _loggingOptions.CurrentValue.MaxRequestBodySize)
+                ? await ReadContent(await request.Content.ReadAsStreamAsync(cancellationToken), _loggingOptions.CurrentValue.MaxRequestBodySize)
                 : null;
             
             var logEntry = new HttpRequestLogEntry
@@ -64,7 +64,7 @@ namespace HappyTravel.HttpRequestLogger
             try
             {
                 var response = await base.SendAsync(request, cancellationToken);
-                var responseBody = await ReadBytes(await response.Content.ReadAsStreamAsync(cancellationToken),
+                var responseBody = await ReadContent(await response.Content.ReadAsStreamAsync(cancellationToken),
                     _loggingOptions.CurrentValue.MaxResponseBodySize);
 
                 logEntry = logEntry with
@@ -128,14 +128,14 @@ namespace HappyTravel.HttpRequestLogger
         }
 
 
-        private static async Task<string> ReadBytes(Stream stream, int? bytes)
+        private static async Task<string> ReadContent(Stream stream, int? bytesLimit)
         {
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            if (!bytes.HasValue || stream.Length < bytes)
+            if (!bytesLimit.HasValue || stream.Length < bytesLimit)
                 return await reader.ReadToEndAsync();
             
-            var chars = new char[Encoding.UTF8.GetMaxCharCount(bytes.Value)];
+            var chars = new char[Encoding.UTF8.GetMaxCharCount(bytesLimit.Value)];
             await reader.ReadAsync(chars, 0, chars.Length);
             
             return new string(chars);
