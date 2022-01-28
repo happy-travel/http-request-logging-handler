@@ -128,14 +128,14 @@ namespace HappyTravel.HttpRequestLogger
         }
 
 
-        private static async Task<string> ReadContent(Stream stream, int? bytesLimit)
+        private static async Task<string> ReadContent(Stream stream, int? byteCount)
         {
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            if (bytesLimit is null || stream.Length <= bytesLimit)
+            if (byteCount is null || stream.Length <= byteCount)
                 return await reader.ReadToEndAsync();
             
-            var chars = new char[Encoding.UTF8.GetMaxCharCount(bytesLimit.Value)];
+            var chars = new char[Encoding.UTF8.GetMaxCharCount(byteCount.Value)];
             await reader.ReadAsync(chars, 0, chars.Length);
             
             return new string(chars);
