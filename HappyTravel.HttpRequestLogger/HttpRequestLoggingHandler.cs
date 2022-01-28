@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -47,7 +48,7 @@ namespace HappyTravel.HttpRequestLogger
             CancellationToken cancellationToken)
         {
             var requestBody = request.Content is not null
-                ? await request.Content.ReadAsStringAsync(cancellationToken)
+                ? await ReadBytes(await request.Content.ReadAsStreamAsync(cancellationToken), _loggingOptions.CurrentValue.MaxRequestBodySize)
                 : null;
             
             var logEntry = new HttpRequestLogEntry
@@ -63,13 +64,15 @@ namespace HappyTravel.HttpRequestLogger
             try
             {
                 var response = await base.SendAsync(request, cancellationToken);
+                var responseBody = await ReadBytes(await response.Content.ReadAsStreamAsync(cancellationToken),
+                    _loggingOptions.CurrentValue.MaxResponseBodySize);
 
                 logEntry = logEntry with
                 {
                     ResponseHeaders = options.AreResponseHeadersHidden
                         ? new()
                         : GetDictionary(response.Headers),
-                    ResponseBody = await response.Content.ReadAsStringAsync(cancellationToken),
+                    ResponseBody = responseBody,
                     StatusCode = (int) response.StatusCode
                 };
                 
@@ -122,6 +125,20 @@ namespace HappyTravel.HttpRequestLogger
                 sb.AppendFormat("{0}: {1}{2}", key, value, Environment.NewLine);
 
             return sb.ToString();
+        }
+
+
+        private static async Task<string> ReadBytes(Stream stream, int? bytes)
+        {
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+
+            if (!bytes.HasValue || stream.Length < bytes)
+                return await reader.ReadToEndAsync();
+            
+            var chars = new char[Encoding.UTF8.GetMaxCharCount(bytes.Value)];
+            await reader.ReadAsync(chars, 0, chars.Length);
+            
+            return new string(chars);
         }
 
 
