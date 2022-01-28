@@ -132,7 +132,7 @@ namespace HappyTravel.HttpRequestLogger
         {
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            if (!bytesLimit.HasValue || stream.Length < bytesLimit)
+            if (bytesLimit is null || stream.Length <= bytesLimit)
                 return await reader.ReadToEndAsync();
             
             var chars = new char[Encoding.UTF8.GetMaxCharCount(bytesLimit.Value)];
