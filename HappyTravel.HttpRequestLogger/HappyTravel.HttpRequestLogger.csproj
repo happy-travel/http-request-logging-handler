@@ -7,12 +7,12 @@
         <Company>HappyTravel</Company>
         <Authors>Vadim Mingazhev</Authors>
         <Description>Configurable http-request logging handler</Description>
-        <PackageReleaseNotes>Updated to Net6</PackageReleaseNotes>
+        <PackageReleaseNotes>Fixed closing stream after reading</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/happy-travel/http-request-logging-handler</PackageProjectUrl>
         <RepositoryURL>https://github.com/happy-travel/http-request-logging-handler</RepositoryURL>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.0.1</PackageVersion>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
