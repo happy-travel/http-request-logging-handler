@@ -134,8 +134,9 @@ namespace HappyTravel.HttpRequestLogger
 
             if (byteCount is null || stream.Length <= byteCount)
             {
+                var result = await reader.ReadToEndAsync();
                 stream.Position = 0;
-                return await reader.ReadToEndAsync();
+                return result;
             }
 
             var chars = new char[Encoding.UTF8.GetMaxCharCount(byteCount.Value)];

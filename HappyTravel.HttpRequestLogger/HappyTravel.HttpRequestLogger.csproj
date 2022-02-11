@@ -10,9 +10,9 @@
         <PackageReleaseNotes>Fixed empty response</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/happy-travel/http-request-logging-handler</PackageProjectUrl>
         <RepositoryURL>https://github.com/happy-travel/http-request-logging-handler</RepositoryURL>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>1.0.2</PackageVersion>
+        <PackageVersion>1.0.3</PackageVersion>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
