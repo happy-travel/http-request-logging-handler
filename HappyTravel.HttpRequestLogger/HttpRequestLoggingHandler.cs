@@ -133,11 +133,15 @@ namespace HappyTravel.HttpRequestLogger
             using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
 
             if (byteCount is null || stream.Length <= byteCount)
+            {
+                stream.Position = 0;
                 return await reader.ReadToEndAsync();
-            
+            }
+
             var chars = new char[Encoding.UTF8.GetMaxCharCount(byteCount.Value)];
             await reader.ReadAsync(chars, 0, chars.Length);
-            
+
+            stream.Position = 0;
             return new string(chars);
         }
 
